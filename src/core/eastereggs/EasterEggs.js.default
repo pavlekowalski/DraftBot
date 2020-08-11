@@ -1,0 +1,10 @@
+class EasterEggs {
+
+  static init() {
+    // It seems to do nothing...
+  }
+}
+
+module.exports = {
+  init: EasterEggs.init,
+};

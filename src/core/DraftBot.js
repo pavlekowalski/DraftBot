@@ -20,8 +20,7 @@ class DraftBot {
         await (require('core/Database')).init();
         await (require('core/Command')).init();
 
-        // TODO 2.1
-        // draftbot.checkEasterEggsFile();
+        DraftBot.checkEasterEggsFile();
 
         DraftBot.programTopWeekTimeout();
         setTimeout(DraftBot.fightPowerRegenerationLoop, FIGHT.POINTS_REGEN_MINUTES*60*1000);
@@ -87,26 +86,24 @@ class DraftBot {
     }
 
     /**
-     * TODO 2.1
      * Checks if the easter eggs file exists and copy the default one if not
      */
-    // checkEasterEggsFile() {
-    //
-    //   let EasterEggs = require("./src/utils/eastereggs/EasterEggs");
-    //   EasterEggs.init();
-    //
-    //   const fs = require('fs');
-    //   if (!fs.existsSync('./src/utils/eastereggs/EasterEggs.js')) {
-    //     fs.copyFileSync('./src/utils/eastereggs/EasterEggs.js.default',
-    //         './src/utils/eastereggs/EasterEggs.js', (err) => {
-    //           if (err) throw err;
-    //         });
-    //     console.warn(
-    //         './src/utils/eastereggs/EasterEggs.js not found. ./src/utils/eastereggs/EasterEggs.js.default copied to be used.');
-    //     console.warn(
-    //         'Ignore this message if you don\'t have the key to decrypt the file.');
-    //   }
-    // }
+    static checkEasterEggsFile() {
+        const fs = require('fs');
+        if (!fs.existsSync('./src/core/eastereggs/EasterEggs.js')) {
+            fs.copyFileSync(
+                './src/core/eastereggs/EasterEggs.js.default',
+                './src/core/eastereggs/EasterEggs.js',
+                (err) => {
+                    if (err) throw err;
+                });
+            console.warn('./src/core/eastereggs/EasterEggs.js not found. ./src/core/eastereggs/EasterEggs.js.default copied to be used.');
+            console.warn('Ignore this message if you don\'t have the key to decrypt the file.');
+        }
+
+        const EasterEggs = require("./eastereggs/EasterEggs");
+        EasterEggs.init();
+    }
 }
 
 /**

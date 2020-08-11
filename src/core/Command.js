@@ -86,6 +86,29 @@ class Command {
   }
 
   /**
+   * @param {String} command - The command to add
+   * @param {*} func - The function of the command
+   * @param {String[]|null} aliases - The aliases of the command. May be null
+   * @return An instance of the command asked
+   */
+  static addCommand(command, func, aliases) {
+    Command.commands.set(command, func);
+    Command.aliases.set(command, command);
+    if (aliases !== null) {
+      for (let j = 0; j < aliases.length; ++j) {
+        Command.commands.set(
+            aliases[j],
+            func,
+        );
+        Command.aliases.set(
+            aliases[j],
+            command,
+        );
+      }
+    }
+  }
+
+  /**
    * @param {String} id
    */
   static hasBlockedPlayer(id) {
@@ -256,6 +279,7 @@ module.exports = {
 };
 
 global.getCommand = Command.getCommand;
+global.addCommand = Command.addCommand;
 global.getBlockedPlayer = Command.getBlockedPlayer;
 global.hasBlockedPlayer = Command.hasBlockedPlayer;
 global.addBlockedPlayer = Command.addBlockedPlayer;
