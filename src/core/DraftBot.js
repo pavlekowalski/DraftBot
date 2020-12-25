@@ -1,5 +1,5 @@
 const fs = require("fs");
-
+const sequelize = require("sequelize");
 /**
  * @class
  */
@@ -68,11 +68,9 @@ class DraftBot {
     }
 
     /**
-     * Daily timeout actions
+     * Choose the next daily potion
      */
-    static async dailyTimeout() {
-        const sequelize = require("sequelize");
-        console.log("INFO: Daily timeout");
+    static async getDailyPotion() {
         const shopPotion = await Shop.findOne({
             attributes: ["shop_potion_id"],
         });
@@ -99,6 +97,12 @@ class DraftBot {
             }
         );
         console.info(`INFO : new potion in shop : ${potion.id}`);
+    }
+
+    /**
+     * lower love points of pets
+     */
+    static async lowerLovePoints() {
         if (draftbotRandom.bool()) {
             console.log("INFO: All pets lost 1 love point");
             await PetEntities.update(
@@ -116,6 +120,14 @@ class DraftBot {
                 }
             );
         }
+    }
+    /**
+     * Daily timeout actions
+     */
+    static async dailyTimeout() {
+        console.info("INFO: Daily timeout");
+        DraftBot.getDailyPotion();
+        DraftBot.lowerLovePoints();
         DraftBot.programDailyTimeout();
     }
 
